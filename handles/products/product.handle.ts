@@ -148,29 +148,42 @@ export default function ProductHandle(): ProductRes {
     let dataTempProduct = lstProductDataDB
     //Biến ghi tạm danh sách sản phẩm
 
-    // const fields = ['ProductCode', 'ProductName', 'Price', 'UPDc', 'FlagActive'];
-    // dataTempProduct.filter(
-    //   (product : any) => {
-    //     return product
-    //   }
-    // )
-
-
-
-
-    for (const x in lstProductDataDB) {
-      if (lstProductDataDB[x].ProductCode == productCode) {
-        console.log('Product', lstProductDataDB[x])
-        dataTempProduct[x] = data
-        localStorage.setItem('DataDB', JSON.stringify(dataTempProduct));
-        setLstProductDataDB(dataTempProduct);
-        // cập nhật danh sách product UI
-        localStorage.setItem('DataUI', JSON.stringify(dataTempProduct));
-        setLstProductDataUI(dataTempProduct);
-        alert('Update thành công')
-        return
+    const fields = ['ProductName', 'Price', 'UPDc', 'FlagActive'];
+    dataTempProduct.map(
+      (product: any, index : number) => {
+        if (product.ProductCode == data.ProductCode) {
+          console.log('index', index);
+          fields.map(field => {
+            product[field] = data[field];           
+          })
+          dataTempProduct[index] = product;
+          console.log(dataTempProduct[index])
+          // cập nhật danh sách product DB
+          localStorage.setItem('DataDB', JSON.stringify(dataTempProduct));
+          setLstProductDataDB(dataTempProduct);
+          // cập nhật danh sách product UI
+          localStorage.setItem('DataUI', JSON.stringify(dataTempProduct));
+          setLstProductDataUI(dataTempProduct);
+        }
       }
-    }
+    )
+
+
+
+
+    // for (const x in lstProductDataDB) {
+    //   if (lstProductDataDB[x].ProductCode == productCode) {
+    //     console.log('Product', lstProductDataDB[x])
+    //     dataTempProduct[x] = data
+    //     localStorage.setItem('DataDB', JSON.stringify(dataTempProduct));
+    //     setLstProductDataDB(dataTempProduct);
+    //     // cập nhật danh sách product UI
+    //     localStorage.setItem('DataUI', JSON.stringify(dataTempProduct));
+    //     setLstProductDataUI(dataTempProduct);
+    //     alert('Update thành công')
+    //     return
+    //   }
+    // }
 
   }
 
