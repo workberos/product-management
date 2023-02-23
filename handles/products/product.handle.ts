@@ -143,21 +143,20 @@ export default function ProductHandle(): ProductRes {
 
   // Tiến hành update product
   const handleUpdateProduct = (productCode: any, data: any) => {
-    // console.log('handleUpdateProduct productCode======', productCode);
-    // console.log('handleUpdateProduct data======', data);
-    let dataTempProduct = lstProductDataDB
     //Biến ghi tạm danh sách sản phẩm
-
+    let dataTempProduct = lstProductDataDB
     const fields = ['ProductName', 'Price', 'UPDc', 'FlagActive'];
     dataTempProduct.map(
       (product: any, index : number) => {
         if (product.ProductCode == data.ProductCode) {
-          console.log('index', index);
+          //map qua các trường và gán dữ liệu cho chúng
           fields.map(field => {
             product[field] = data[field];           
           })
+          //Gán giá trị sản phẩm sau khi update
           dataTempProduct[index] = product;
-          console.log(dataTempProduct[index])
+          alert('Update thành công')
+
           // cập nhật danh sách product DB
           localStorage.setItem('DataDB', JSON.stringify(dataTempProduct));
           setLstProductDataDB(dataTempProduct);
@@ -167,24 +166,6 @@ export default function ProductHandle(): ProductRes {
         }
       }
     )
-
-
-
-
-    // for (const x in lstProductDataDB) {
-    //   if (lstProductDataDB[x].ProductCode == productCode) {
-    //     console.log('Product', lstProductDataDB[x])
-    //     dataTempProduct[x] = data
-    //     localStorage.setItem('DataDB', JSON.stringify(dataTempProduct));
-    //     setLstProductDataDB(dataTempProduct);
-    //     // cập nhật danh sách product UI
-    //     localStorage.setItem('DataUI', JSON.stringify(dataTempProduct));
-    //     setLstProductDataUI(dataTempProduct);
-    //     alert('Update thành công')
-    //     return
-    //   }
-    // }
-
   }
 
   return {
