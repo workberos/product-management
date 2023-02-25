@@ -28,7 +28,6 @@ function ProductForm({ isUpdateMode = false }: any) {
     handleUpdateProduct,
     lstProductDataDB,
   }: ProductRes = ProductHandle();
-
   // Các hàm của react-hook-form
   const {
     register,//hàm theo dõi thay đổi của field
@@ -56,17 +55,24 @@ function ProductForm({ isUpdateMode = false }: any) {
 
   // Tiến hành check chế độ page(create hay update) + id để lấy ra thông tin của product để fill vào form khi tiến hành edit
   useEffect(() => {
+    console.log('lstProductDataDB================isUpdateMode', isUpdateMode);
+    console.log('lstProductDataDB================lstProductDataDB1', lstProductDataDB);
+    console.log('lstProductDataDB================id', id);
+
     if (isUpdateMode) {
-      if (id && lstProductDataDB) {
+      if (id && lstProductDataDB.length) {
+        console.log('lstProductDataDB================isUpdateMode1', lstProductDataDB);
         // dựa vào id trên trình duyệt lấy ra thông tin product
-        const productInfo = lstProductDataDB.find((item: any) => item.ProductCode == id);
+        const productInfo = lstProductDataDB.find((item: any) => item.ProductCode.trim() == id);
+        console.log('lstProductDataDB================productInfo', productInfo);
+
         // Danh sách các field của form
         const fields = ['ProductCode', 'ProductName', 'Price', 'UPDc', 'FlagActive'];
         // Tiến hành set value vào form khi edit
         fields.forEach(field => setValue(field, productInfo[field]));
       }
     }
-  }, [isUpdateMode]);
+  }, [lstProductDataDB,id]);
 
 
   return (
@@ -100,6 +106,7 @@ function ProductForm({ isUpdateMode = false }: any) {
       </div>
       {isUpdateMode ?
         <input type="submit" value="Cập nhật" /> : <input type="submit" value="Tạo mới" />}
+        <button onClick={()=>{router.push(`/product`)}}>Back</button>
     </form>
   );
 }

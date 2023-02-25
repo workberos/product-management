@@ -1,6 +1,6 @@
 import { lstProducts, statusAction, statusProduct } from "@/constant/listProduct"
 import { ProductRes } from "@/types/page/product.type"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from 'next/router'
 
 
@@ -11,11 +11,27 @@ import { useRouter } from 'next/router'
 export default function ProductHandle(): ProductRes {
   const router = useRouter()
   // Data sản phẩm gốc dùng để filter product
-  const [lstProductDataDB, setLstProductDataDB] = useState<any>(lstProducts)
+  const [lstProductDataDB, setLstProductDataDB] = useState<any>([])
   // Data hiển thị ra UI
   const [lstProductDataUI, setLstProductDataUI] = useState(lstProductDataDB)
   // Danh sách checkbox xóa nhiều
   const [listCheckedDeleteProduct, setListCheckedDeleteProduct] = useState<any>({})
+  useEffect(() => {
+    const dataDB: any = localStorage.getItem('DataDB');
+
+    // gán danh sách product UI
+    const dataUI = localStorage.getItem('DataUI');
+    const dataDBParse = JSON.parse(dataDB)
+    console.log('useEffect', dataDBParse)
+    if (dataDBParse) {
+      setLstProductDataDB(dataDBParse);
+    } else {
+      setLstProductDataDB(lstProducts)
+    }
+    if (dataUI) {
+      // setLstProductDataUI(dataDBParse);
+    }
+  }, [])
 
   // Xử lý filter product khi chọn dropdown
   const handleFilterListProduct = (flagActive: number) => {
@@ -132,40 +148,61 @@ export default function ProductHandle(): ProductRes {
         return
       }
     }
+    
+    
+    //Nếu trạng thái được check sẽ gán giá trị 1, ngược lại sẽ là 0
+    if (data.FlagActive == true){
+      data.FlagActive = 1;
+    }else{
+      data.FlagActive = 0;
+    }
+    console.log('handleCreateProduct', data);
     // cập nhật danh sách product DB
     localStorage.setItem('DataDB', JSON.stringify([...lstProductDataDB, data]));
     setLstProductDataDB([...lstProductDataDB, data]);
     // cập nhật danh sách product UI
     localStorage.setItem('DataUI', JSON.stringify([...lstProductDataDB, data]));
     setLstProductDataUI([...lstProductDataUI, data]);
-    alert('Thêm sản phẩm thành công')
+    alert('Thêm sản phẩm thành công');
+    router.push(`/product`);
   }
 
   // Tiến hành update product
   const handleUpdateProduct = (productCode: any, data: any) => {
+    console.log('data-----handleUpdate',data);
+    
+    //Nếu trạng thái được check sẽ gán giá trị 1, ngược lại sẽ là 0
+    if (data.FlagActive == true){
+      data.FlagActive = 1;
+    }else{
+      data.FlagActive = 0;
+    }
     //Biến ghi tạm danh sách sản phẩm
     let dataTempProduct = lstProductDataDB
     const fields = ['ProductName', 'Price', 'UPDc', 'FlagActive'];
+    const dataMap: any = []
     dataTempProduct.map(
-      (product: any, index : number) => {
-        if (product.ProductCode == data.ProductCode) {
-          //map qua các trường và gán dữ liệu cho chúng
-          fields.map(field => {
-            product[field] = data[field];           
-          })
-          //Gán giá trị sản phẩm sau khi update
-          dataTempProduct[index] = product;
-          alert('Update thành công')
-
-          // cập nhật danh sách product DB
-          localStorage.setItem('DataDB', JSON.stringify(dataTempProduct));
-          setLstProductDataDB(dataTempProduct);
-          // cập nhật danh sách product UI
-          localStorage.setItem('DataUI', JSON.stringify(dataTempProduct));
-          setLstProductDataUI(dataTempProduct);
+      (product: any, index: number) => {
+        let obj: any;
+        if (product.ProductCode.trim() == data.ProductCode.trim()) {
+          obj = {
+            ProductCode: data.ProductCode,
+            ...data
+          }
+        } else {
+          obj = product
         }
+        dataMap.push(obj)
       }
     )
+    // cập nhật danh sách product DB
+    localStorage.setItem('DataDB', JSON.stringify(dataMap));
+    setLstProductDataDB(dataMap);
+    // cập nhật danh sách product UI
+    localStorage.setItem('DataUI', JSON.stringify(dataMap));
+    setLstProductDataUI(dataMap);
+    router.push(`/product`)
+
   }
 
   return {
