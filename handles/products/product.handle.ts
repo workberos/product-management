@@ -148,8 +148,6 @@ export default function ProductHandle(): ProductRes {
         return
       }
     }
-    
-    
     //Nếu trạng thái được check sẽ gán giá trị 1, ngược lại sẽ là 0
     if (data.FlagActive == true){
       data.FlagActive = 1;
@@ -169,17 +167,19 @@ export default function ProductHandle(): ProductRes {
 
   // Tiến hành update product
   const handleUpdateProduct = (productCode: any, data: any) => {
-    console.log('data-----handleUpdate',data);
     
     //Nếu trạng thái được check sẽ gán giá trị 1, ngược lại sẽ là 0
-    if (data.FlagActive == true){
+    if (data.FlagActive == 'true' ){
       data.FlagActive = 1;
     }else{
       data.FlagActive = 0;
     }
+    console.log('data.FlagActive',data.FlagActive);
+    console.log('data',data);
+
+    
     //Biến ghi tạm danh sách sản phẩm
     let dataTempProduct = lstProductDataDB
-    const fields = ['ProductName', 'Price', 'UPDc', 'FlagActive'];
     const dataMap: any = []
     dataTempProduct.map(
       (product: any, index: number) => {

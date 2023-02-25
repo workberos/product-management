@@ -53,31 +53,31 @@ function ListProduct() {
       <table border={1}>
         <tbody>
           <tr>
-            <th>STT </th>
-            <th>Actions </th>
-            <th>Check </th>
-            <th>Mã sản phẩm </th>
-            <th>Tên sản phẩm </th>
-            <th>Giá sản phẩm </th>
+            <th className='stt'>STT </th>
+            <th className='act'>Actions </th>
+            <th className='check'>Check </th>
+            <th className='prCode'>Mã sản phẩm </th>
+            <th className='prName'>Tên sản phẩm </th>
+            <th className='prPr'>Giá sản phẩm </th>
             {/* <th>% khuyen mai</th> */}
-            <th> Giá khuyến mại </th>
+            <th className='sale'> Giá khuyến mại </th>
             {/* <th>Khuyen mai theo gia</th>
             <th>Thuong hieu</th>
             <th>Nhom san pham</th> */}
-            <th> Trạng thái </th>
+            <th className='status'> Trạng thái </th>
           </tr>
           {lstProductDataUI.map((product: any, index: any) => {
             return (
               <tr key={product.ProductCode}>
                 <td>{index + 1}</td>
-                <td>
-                  <select style={{ fontWeight: 'bold', }} onChange={(e) => handleEditDeleteProduct(e, product.ProductCode)}>
+                <td style={{ padding: '0'}}>
+                  <select style={{ fontWeight: 'bold'}} onChange={(e) => handleEditDeleteProduct(e, product.ProductCode)}>
                     <option value=""></option>
                     <option value="edit">Edit</option>
                     <option value="delete">Delete</option>
                   </select>
                 </td>
-                <td><input type="checkbox" className="selectsingle" value={product.ProductCode} onChange={() => handleCheckDeleteMany(product.ProductCode)} />
+                <td ><input type="checkbox" className="selectsingle" value={product.ProductCode} onChange={() => handleCheckDeleteMany(product.ProductCode)} />
                   &nbsp;&nbsp;
                 </td>
                 <td>{product.ProductCode}</td>
