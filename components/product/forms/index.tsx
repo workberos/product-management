@@ -76,7 +76,8 @@ function ProductForm({ isUpdateMode = false }: any) {
 
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+   <div>
+     <form onSubmit={handleSubmit(onSubmit)}>
       {isUpdateMode ? '' :
         <div>
           <label>Mã Sản Phẩm</label>
@@ -108,6 +109,7 @@ function ProductForm({ isUpdateMode = false }: any) {
         <input type="submit" value="Cập nhật" /> : <input type="submit" value="Tạo mới" />}
         <button onClick={()=>{router.push(`/product`)}}>Back</button>
     </form>
+   </div>
   );
 }
 export default ProductForm
