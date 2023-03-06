@@ -18,7 +18,7 @@ export default function ProductHandle(): ProductRes {
   const [listCheckedDeleteProduct, setListCheckedDeleteProduct] = useState<any>({})
   useEffect(() => {
     const dataDB: any = localStorage.getItem('DataDB');
-
+    console.log('dataDB========>',dataDB);
     // gán danh sách product UI
     const dataUI = localStorage.getItem('DataUI');
     const dataDBParse = JSON.parse(dataDB)
@@ -80,15 +80,23 @@ export default function ProductHandle(): ProductRes {
     setLstProductDataUI(lstProducts);
   }
 
+    /**
+     * updateStorage: Cần gọi sau khi dữ liệu ở danh sách thay đổi để cập nhật vào localStorage
+     * @returns
+     */
+  const updateStorage = (newProductList:Array<Object>)=>{
+
+    // gán danh sách product gốc
+    localStorage.setItem('DataDB', JSON.stringify(newProductList));
+    setLstProductDataDB(newProductList);
+    // gán danh sách product UI
+    localStorage.setItem('DataUI', JSON.stringify(newProductList));
+    setLstProductDataUI(newProductList);
+  }
   // xử lý xóa product single
   const handleDeleteProductSingle = (productCode: string) => {
     const listProductFilter = lstProductDataUI.filter((item: any) => item.ProductCode != productCode)
-    // gán danh sách product gốc
-    localStorage.setItem('DataDB', JSON.stringify(listProductFilter));
-    setLstProductDataDB(listProductFilter);
-    // gán danh sách product UI
-    localStorage.setItem('DataUI', JSON.stringify(listProductFilter));
-    setLstProductDataUI(listProductFilter);
+    updateStorage(listProductFilter);
   }
 
   //Xử lý gán sản phẩm để xóa nhiều 
@@ -131,12 +139,7 @@ export default function ProductHandle(): ProductRes {
 
       }
     }
-    // gán danh sách product DB
-    localStorage.setItem('DataDB', JSON.stringify(dataTempProduct));
-    setLstProductDataDB(dataTempProduct);
-    // gán danh sách product UI
-    localStorage.setItem('DataUI', JSON.stringify(dataTempProduct));
-    setLstProductDataUI(dataTempProduct);
+    updateStorage(dataTempProduct);
   }
 
   // Tiến hành tạo product
@@ -154,13 +157,7 @@ export default function ProductHandle(): ProductRes {
     }else{
       data.FlagActive = 0;
     }
-    console.log('handleCreateProduct', data);
-    // cập nhật danh sách product DB
-    localStorage.setItem('DataDB', JSON.stringify([...lstProductDataDB, data]));
-    setLstProductDataDB([...lstProductDataDB, data]);
-    // cập nhật danh sách product UI
-    localStorage.setItem('DataUI', JSON.stringify([...lstProductDataDB, data]));
-    setLstProductDataUI([...lstProductDataUI, data]);
+    updateStorage([...lstProductDataDB, data]);
     alert('Thêm sản phẩm thành công');
     router.push(`/product`);
   }
@@ -195,13 +192,8 @@ export default function ProductHandle(): ProductRes {
         dataMap.push(obj)
       }
     )
-    // cập nhật danh sách product DB
-    localStorage.setItem('DataDB', JSON.stringify(dataMap));
-    setLstProductDataDB(dataMap);
-    // cập nhật danh sách product UI
-    localStorage.setItem('DataUI', JSON.stringify(dataMap));
-    setLstProductDataUI(dataMap);
-    router.push(`/product`)
+    updateStorage(dataMap);
+    router.push(`/product`);
 
   }
 

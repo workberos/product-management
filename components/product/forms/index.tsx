@@ -5,15 +5,16 @@ import { useRouter } from 'next/router';
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import React, { useRef } from 'react';
+import React, { useRef } from 'react';7
+
 
 // validate Form
 const validateSchemaProduct = yup.object().shape({
-  ProductCode: yup.string().required(),
-  ProductName: yup.string().required(),
-  Price: yup.string().required(),
-  UPDc: yup.string().required(),
-  FlagActive: yup.string().required(),
+  ProductCode: yup.string().required().max(30),
+  ProductName: yup.string().required().max(30),
+  Price: yup.number().required().min(0),
+  UPDc: yup.number().required().min(0),
+  FlagActive: yup.bool().required(),
 
 });
 
@@ -43,28 +44,25 @@ function ProductForm({ isUpdateMode = false }: any) {
     // Nếu là page edit thì tiến hành update product
     if (isUpdateMode) {
       handleUpdateProduct(id, data);
-
     } else {
       // Nếu là page update edit thì tiến hành update product
       handleCreateProduct(data)
       console.log('lstProductDataDB when add new item', lstProductDataDB);
-
-
     }
   };
 
   // Tiến hành check chế độ page(create hay update) + id để lấy ra thông tin của product để fill vào form khi tiến hành edit
   useEffect(() => {
-    console.log('lstProductDataDB================isUpdateMode', isUpdateMode);
-    console.log('lstProductDataDB================lstProductDataDB1', lstProductDataDB);
-    console.log('lstProductDataDB================id', id);
+    // console.log('lstProductDataDB================isUpdateMode', isUpdateMode);
+    // console.log('lstProductDataDB================lstProductDataDB1', lstProductDataDB);
+    // console.log('lstProductDataDB================id', id);
 
     if (isUpdateMode) {
       if (id && lstProductDataDB.length) {
-        console.log('lstProductDataDB================isUpdateMode1', lstProductDataDB);
+        // console.log('lstProductDataDB================isUpdateMode1', lstProductDataDB);
         // dựa vào id trên trình duyệt lấy ra thông tin product
         const productInfo = lstProductDataDB.find((item: any) => item.ProductCode.trim() == id);
-        console.log('lstProductDataDB================productInfo', productInfo);
+        // console.log('lstProductDataDB================productInfo', productInfo);
 
         // Danh sách các field của form
         const fields = ['ProductCode', 'ProductName', 'Price', 'UPDc', 'FlagActive'];
@@ -76,7 +74,7 @@ function ProductForm({ isUpdateMode = false }: any) {
 
 
   return (
-   <div>
+   <>
      <form onSubmit={handleSubmit(onSubmit)}>
       {isUpdateMode ? '' :
         <div>
@@ -109,7 +107,7 @@ function ProductForm({ isUpdateMode = false }: any) {
         <input type="submit" value="Cập nhật" /> : <input type="submit" value="Tạo mới" />}
         <button onClick={()=>{router.push(`/product`)}}>Back</button>
     </form>
-   </div>
+   </>
   );
 }
 export default ProductForm

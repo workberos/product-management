@@ -3,6 +3,10 @@ import { ProductRes } from '@/types/page/product.type';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { lstProducts } from '../../constant/listProduct';
+
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+
 function ListProduct() {
   const {
     lstProductDataUI = [],
@@ -10,7 +14,7 @@ function ListProduct() {
     handleEditDeleteProduct,
     handleClearStorage,
     handleCheckDeleteMany,
-    handleDeleteProductMulti,
+    handleDeleteProductMulti, 
     setLstProductDataDB,
     setLstProductDataUI,
   }: ProductRes = ProductHandle();
@@ -37,6 +41,28 @@ function ListProduct() {
   }, [])
 
 
+
+
+    // modal delete confirm
+    const ConfirmDeleteMulti = () => {
+      confirmAlert({
+        customUI: ({ onClose }) => {
+          return (
+            <div className='custom-ui'>
+              <h1>Xóa nhiều</h1>
+              <p>Bạn có chắc là muốn xóa các sản phẩm này không?</p>
+              <button className='btn-confirm' onClick={onClose}>Hủy</button>
+              <button className='btn-confirm' onClick={() => {
+                  handleDeleteProductMulti();
+                  onClose()
+              }}>Xóa!</button>
+            </div>
+          )
+        }
+      })
+    }
+
+
   return (
     <div className='view'>
       <nav>
@@ -45,9 +71,11 @@ function ListProduct() {
           <option value="1">Đang kinh doanh</option>
           <option value="0">Ngừng kinh doanh</option>
         </select>
-        <button type="button" onClick={handleDeleteProductMulti}>Tiến hành xóa nhiều</button>
+
+        <button type="button" onClick={ConfirmDeleteMulti}>Tiến hành xóa nhiều</button>
         <button><Link href="/product/create">Tiến hành add product</Link></button>
         <button type="button" onClick={handleClearStorage}>Tiến hành xóa storage</button>
+        
 
       </nav>
       <table border={1}>
