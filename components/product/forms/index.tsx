@@ -76,7 +76,7 @@ function ProductForm({ isUpdateMode = false }: any) {
   return (
    <>
      <form onSubmit={handleSubmit(onSubmit)}>
-      {isUpdateMode ? '' :
+      {isUpdateMode &&
         <div>
           <label>Mã Sản Phẩm</label>
           <input  {...register("ProductCode")} />
